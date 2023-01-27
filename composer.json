@@ -1,0 +1,25 @@
+{
+  "name": "oengine/laravel-package",
+  "description": "",
+  "authors": [
+    {
+      "name": "Nguyen Van Hau",
+      "email": "nguyenvanhau.soft@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {},
+  "require-dev": {},
+  "extra": {
+    "laravel": {
+      "providers": [],
+      "aliases": {}
+    }
+  },
+  "autoload": {
+    "files": [],
+    "psr-4": {
+      "OEngine\\LaravelPackage\\": "src/"
+    }
+  }
+}
