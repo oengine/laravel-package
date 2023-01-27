@@ -15,7 +15,11 @@ trait WithServiceProvider
     protected ServicePackage $package;
 
     abstract public function configurePackage(ServicePackage $package): void;
-
+    private $extendPackage = false;
+    protected function ExtendPackage($flg = true)
+    {
+        $this->extendPackage = $flg;
+    }
     public function register()
     {
         $this->registeringPackage();
@@ -33,8 +37,8 @@ trait WithServiceProvider
         foreach ($this->package->configFileNames as $configFileName) {
             $this->mergeConfigFrom($this->package->basePath("/../config/{$configFileName}.php"), $configFileName);
         }
-
-        $this->packageRegistered();
+        if (!$this->extendPackage)
+            $this->packageRegistered();
 
         return $this;
     }
@@ -171,7 +175,8 @@ trait WithServiceProvider
             View::composer($viewName, $viewComposer);
         }
 
-        $this->packageBooted();
+        if (!$this->extendPackage)
+            $this->packageBooted();
 
         return $this;
     }
