@@ -72,41 +72,43 @@ trait WithServiceProvider
                 }
             }
 
-            if ($this->package->hasViews) {
+            if ($this->package->hasViews && File::exists($this->package->basePath("/../resources/views"))) {
                 $this->publishes([
                     $this->package->basePath('/../resources/views') => base_path("resources/views/vendor/{$this->package->shortName()}"),
                 ], "{$this->package->shortName()}-views");
             }
+            if (File::exists($this->package->basePath("/../database/migrations/"))) {
+                $now = Carbon::now();
+                foreach ($this->package->migrationFileNames as $migrationFileName) {
+                    $filePath = $this->package->basePath("/../database/migrations/{$migrationFileName}.php");
+                    if (!file_exists($filePath)) {
+                        // Support for the .stub file extension
+                        $filePath .= '.stub';
+                    }
 
-            $now = Carbon::now();
-            foreach ($this->package->migrationFileNames as $migrationFileName) {
-                $filePath = $this->package->basePath("/../database/migrations/{$migrationFileName}.php");
-                if (!file_exists($filePath)) {
-                    // Support for the .stub file extension
-                    $filePath .= '.stub';
+                    $this->publishes([
+                        $filePath => $this->generateMigrationName(
+                            $migrationFileName,
+                            $now->addSecond()
+                        ),
+                    ], "{$this->package->shortName()}-migrations");
+
+                    if ($this->package->runsMigrations) {
+                        $this->loadMigrationsFrom($filePath);
+                    }
                 }
-
-                $this->publishes([
-                    $filePath => $this->generateMigrationName(
-                        $migrationFileName,
-                        $now->addSecond()
-                    ),
-                ], "{$this->package->shortName()}-migrations");
-
-                if ($this->package->runsMigrations) {
-                    $this->loadMigrationsFrom($filePath);
-                }
-            }
-            if ($this->package->runsMigrations && File::exists($this->package->basePath("/../database/migrations/"))) {
-                $migrationFiles =  File::allFiles($this->package->basePath("/../database/migrations/"));
-                if ($migrationFiles && count($migrationFiles) > 0) {
-                    foreach ($migrationFiles  as $file) {
-                        if ($file->getExtension() == "php") {
-                            $this->loadMigrationsFrom($file->getRealPath());
+                if ($this->package->runsMigrations && File::exists($this->package->basePath("/../database/migrations/"))) {
+                    $migrationFiles =  File::allFiles($this->package->basePath("/../database/migrations/"));
+                    if ($migrationFiles && count($migrationFiles) > 0) {
+                        foreach ($migrationFiles  as $file) {
+                            if ($file->getExtension() == "php") {
+                                $this->loadMigrationsFrom($file->getRealPath());
+                            }
                         }
                     }
                 }
             }
+
 
             if ($this->package->runsSeeds && File::exists($this->package->basePath("/../database/seeders/"))) {
                 $seedFiles =  File::allFiles($this->package->basePath("/../database/seeders/"));
