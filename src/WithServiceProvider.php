@@ -97,7 +97,7 @@ trait WithServiceProvider
                     $this->loadMigrationsFrom($filePath);
                 }
             }
-            if ($this->package->runsMigrations) {
+            if ($this->package->runsMigrations && File::exists($this->package->basePath("/../database/migrations/"))) {
                 $migrationFiles =  File::allFiles($this->package->basePath("/../database/migrations/"));
                 if ($migrationFiles && count($migrationFiles) > 0) {
                     foreach ($migrationFiles  as $file) {
@@ -108,7 +108,7 @@ trait WithServiceProvider
                 }
             }
 
-            if ($this->package->runsSeeds) {
+            if ($this->package->runsSeeds && File::exists($this->package->basePath("/../database/seeders/"))) {
                 $seedFiles =  File::allFiles($this->package->basePath("/../database/seeders/"));
                 if ($seedFiles && count($seedFiles) > 0) {
                     foreach ($seedFiles  as $file) {
@@ -118,13 +118,13 @@ trait WithServiceProvider
                     }
                 }
             }
-            if ($this->package->hasTranslations) {
+            if ($this->package->hasTranslations && File::exists($this->package->basePath('/../resources/lang'))) {
                 $this->publishes([
                     $this->package->basePath('/../resources/lang') => $langPath,
                 ], "{$this->package->shortName()}-translations");
             }
 
-            if ($this->package->hasAssets) {
+            if ($this->package->hasAssets && File::exists($this->package->basePath('/../resources/dist'))) {
                 $this->publishes([
                     $this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortName()}"),
                 ], "{$this->package->shortName()}-assets");
@@ -139,7 +139,7 @@ trait WithServiceProvider
                 $this->commands($commands);
             }
         }
-        if ($this->package->hasTranslations) {
+        if ($this->package->hasTranslations && File::exists($this->package->basePath('/../resources/lang/'))) {
             $this->loadTranslationsFrom(
                 $this->package->basePath('/../resources/lang/'),
                 $this->package->shortName()
@@ -150,21 +150,23 @@ trait WithServiceProvider
             $this->loadJsonTranslationsFrom($langPath);
         }
 
-        if ($this->package->hasViews) {
+        if ($this->package->hasViews && File::exists($this->package->basePath('/../resources/views'))) {
             $this->loadViewsFrom($this->package->basePath('/../resources/views'), $this->package->viewNamespace());
         }
+        if ($this->package->viewComponents) {
+            foreach ($this->package->viewComponents as $componentClass => $prefix) {
+                $this->loadViewComponentsAs($prefix, [$componentClass]);
+            }
 
-        foreach ($this->package->viewComponents as $componentClass => $prefix) {
-            $this->loadViewComponentsAs($prefix, [$componentClass]);
+            if (count($this->package->viewComponents)) {
+                $this->publishes([
+                    $this->package->basePath('/../Components') => base_path("app/View/Components/vendor/{$this->package->shortName()}"),
+                ], "{$this->package->name}-components");
+            }
         }
 
-        if (count($this->package->viewComponents)) {
-            $this->publishes([
-                $this->package->basePath('/../Components') => base_path("app/View/Components/vendor/{$this->package->shortName()}"),
-            ], "{$this->package->name}-components");
-        }
 
-        if ($this->package->publishableProviderName) {
+        if ($this->package->publishableProviderName && File::exists($this->package->basePath("/../resources/stubs/{$this->package->publishableProviderName}.php.stub"))) {
             $this->publishes([
                 $this->package->basePath("/../resources/stubs/{$this->package->publishableProviderName}.php.stub") => base_path("app/Providers/{$this->package->publishableProviderName}.php"),
             ], "{$this->package->shortName()}-provider");
