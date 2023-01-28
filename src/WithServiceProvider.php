@@ -77,7 +77,7 @@ trait WithServiceProvider
                     $this->package->basePath('/../resources/views') => base_path("resources/views/vendor/{$this->package->shortName()}"),
                 ], "{$this->package->shortName()}-views");
             }
-            if (File::exists($this->package->basePath("/../database/migrations/"))) {
+            if (File::exists($this->package->basePath("/../database/migrations"))) {
                 $now = Carbon::now();
                 foreach ($this->package->migrationFileNames as $migrationFileName) {
                     $filePath = $this->package->basePath("/../database/migrations/{$migrationFileName}.php");
@@ -110,7 +110,7 @@ trait WithServiceProvider
             }
 
 
-            if ($this->package->runsSeeds && File::exists($this->package->basePath("/../database/seeders/"))) {
+            if ($this->package->runsSeeds && File::exists($this->package->basePath("/../database/seeders"))) {
                 $seedFiles =  File::allFiles($this->package->basePath("/../database/seeders/"));
                 if ($seedFiles && count($seedFiles) > 0) {
                     foreach ($seedFiles  as $file) {
@@ -141,13 +141,13 @@ trait WithServiceProvider
                 $this->commands($commands);
             }
         }
-        if ($this->package->hasTranslations && File::exists($this->package->basePath('/../resources/lang/'))) {
+        if ($this->package->hasTranslations && File::exists($this->package->basePath('/../resources/lang'))) {
             $this->loadTranslationsFrom(
                 $this->package->basePath('/../resources/lang/'),
                 $this->package->shortName()
             );
 
-            $this->loadJsonTranslationsFrom($this->package->basePath('/../resources/lang/'));
+            $this->loadJsonTranslationsFrom($this->package->basePath('/../resources/lang'));
 
             $this->loadJsonTranslationsFrom($langPath);
         }
@@ -155,7 +155,7 @@ trait WithServiceProvider
         if ($this->package->hasViews && File::exists($this->package->basePath('/../resources/views'))) {
             $this->loadViewsFrom($this->package->basePath('/../resources/views'), $this->package->viewNamespace());
         }
-        if ($this->package->viewComponents) {
+        if ($this->package->viewComponents && File::exists($this->package->basePath('/../Components'))) {
             foreach ($this->package->viewComponents as $componentClass => $prefix) {
                 $this->loadViewComponentsAs($prefix, [$componentClass]);
             }
