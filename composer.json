@@ -1,5 +1,6 @@
 {
   "name": "oengine/laravel-package",
+  "license": "MIT",
   "description": "",
   "authors": [
     {
@@ -21,5 +22,10 @@
     "psr-4": {
       "OEngine\\LaravelPackage\\": "src/"
     }
-  }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
