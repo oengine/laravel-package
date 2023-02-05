@@ -38,6 +38,9 @@ trait WithServiceProvider
             if (File::exists($this->package->basePath("/../config/{$configFileName}.php")))
                 $this->mergeConfigFrom($this->package->basePath("/../config/{$configFileName}.php"), $configFileName);
         }
+        if (File::exists($this->package->basePath("/../config/{$this->package->shortName()}.php")))
+            $this->mergeConfigFrom($this->package->basePath("/../config/{$this->package->shortName()}.php"), $this->package->shortName());
+
         if (!$this->extendPackage)
             $this->packageRegistered();
 
