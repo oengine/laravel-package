@@ -10,7 +10,7 @@ class JsonData implements \ArrayAccess
     private $__data;
     public function CloneData()
     {
-        return new self(json_decode(json_encode($this->__data)), $this->__parent);
+        return new self(json_decode(json_encode($this->__data),true), $this->__parent);
     }
     public function getJsonFromFile($path_file)
     {
