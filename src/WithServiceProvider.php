@@ -29,7 +29,7 @@ trait WithServiceProvider
         $this->package->setBasePath($this->getPackageBaseDir());
 
         $this->configurePackage($this->package);
-
+        $this->configurePackaged();
         if (empty($this->package->name)) {
             throw InvalidPackage::nameIsRequired();
         }
@@ -214,7 +214,9 @@ trait WithServiceProvider
     public function registeringPackage()
     {
     }
-
+    public function configurePackaged()
+    {
+    }
     public function packageRegistered()
     {
     }
