@@ -18,7 +18,10 @@
     }
   },
   "autoload": {
-    "files": [],
+    "files": [
+      "helpers/constraint.php",
+      "helpers/package.php"
+    ],
     "psr-4": {
       "OEngine\\LaravelPackage\\": "src/"
     }
