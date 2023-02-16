@@ -6,7 +6,8 @@
     {
       "name": "Nguyen Van Hau",
       "email": "nguyenvanhau.soft@gmail.com",
-      "role": "Developer"
+      "role": "Developer",
+      "homepage": "https://github.com/devhau"
     }
   ],
   "require": {},
