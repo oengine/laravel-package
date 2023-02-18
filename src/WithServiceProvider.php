@@ -13,7 +13,12 @@ use ReflectionClass;
 trait WithServiceProvider
 {
     protected ServicePackage $package;
-
+    protected $dataInfo;
+    public function setDataInfo($data)
+    {
+        $this->dataInfo = $data;
+        return $this;
+    }
     abstract public function configurePackage(ServicePackage $package): void;
     private $extendPackage = false;
     protected function ExtendPackage($flg = true)
