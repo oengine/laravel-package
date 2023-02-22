@@ -12,6 +12,8 @@ class ServicePackage
 
     public bool $hasViews = false;
 
+    public bool $hasRouteWeb = false;
+
     public bool $hasHelpers = false;
 
     public string $pathHelper = '';
@@ -70,7 +72,12 @@ class ServicePackage
     {
         return Str::after($this->name, 'laravel-');
     }
+    public function RouteWeb(bool $hasRouteWeb = true): self
+    {
+        $this->hasRouteWeb = $hasRouteWeb;
 
+        return $this;
+    }
     public function hasViews(string $namespace = null): self
     {
         $this->hasViews = true;

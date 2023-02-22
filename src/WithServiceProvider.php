@@ -4,6 +4,7 @@ namespace OEngine\LaravelPackage;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use OEngine\LaravelPackage\Exceptions\InvalidPackage;
@@ -46,6 +47,10 @@ trait WithServiceProvider
         if (File::exists($this->package->basePath("/../config/{$this->package->shortName()}.php")))
             $this->mergeConfigFrom($this->package->basePath("/../config/{$this->package->shortName()}.php"), $this->package->shortName());
 
+        if ($this->package->hasRouteWeb) {
+            Route::middleware('web')
+                ->group($this->package->basePath('/../routes/web.php'));
+        }
         if (!$this->extendPackage)
             $this->packageRegistered();
 
