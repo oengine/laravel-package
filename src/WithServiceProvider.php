@@ -13,7 +13,7 @@ use ReflectionClass;
 
 trait WithServiceProvider
 {
-    protected ServicePackage $package;
+    public ServicePackage $package;
     protected $dataInfo;
     public function setDataInfo($data)
     {
