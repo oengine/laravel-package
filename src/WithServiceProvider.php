@@ -21,6 +21,11 @@ trait WithServiceProvider
         return $this;
     }
     abstract public function configurePackage(ServicePackage $package): void;
+    private $withHook = true;
+    protected function DisableHook($flg = false)
+    {
+        $this->withHook = $flg;
+    }
     private $extendPackage = false;
     protected function ExtendPackage($flg = true)
     {
@@ -39,6 +44,8 @@ trait WithServiceProvider
         if (empty($this->package->name)) {
             throw InvalidPackage::nameIsRequired();
         }
+        if ($this->withHook)
+            do_action(PACKAGE_SERVICE_PROVIDER_REGISTER, $this);
 
         foreach ($this->package->configFileNames as $configFileName) {
             if (File::exists($this->package->basePath("/../config/{$configFileName}.php")))
@@ -66,7 +73,8 @@ trait WithServiceProvider
     {
         $this->bootingPackage();
 
-
+        if ($this->withHook)
+            do_action(PACKAGE_SERVICE_PROVIDER_BOOT, $this);
 
         if ($this->package->hasTranslations) {
             $langPath = 'vendor/' . $this->package->shortName();
