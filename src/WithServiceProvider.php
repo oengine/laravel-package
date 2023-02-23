@@ -14,12 +14,6 @@ use ReflectionClass;
 trait WithServiceProvider
 {
     public ServicePackage $package;
-    protected $dataInfo;
-    public function setDataInfo($data)
-    {
-        $this->dataInfo = $data;
-        return $this;
-    }
     abstract public function configurePackage(ServicePackage $package): void;
     private $withHook = true;
     protected function DisableHook($flg = false)
