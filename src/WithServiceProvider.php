@@ -253,7 +253,7 @@ trait WithServiceProvider
         return dirname($reflector->getFileName());
     }
 
-    protected function getNamespaceName(): string
+    public function getNamespaceName(): string
     {
         $reflector = new ReflectionClass(get_class($this));
 
