@@ -92,3 +92,25 @@ if (!function_exists('get_hooks')) {
         return Arr::get($listeners, $name, []);
     }
 }
+
+
+if (!function_exists('has_hooks')) {
+    /**
+     * @param  string|null  $name
+     * @param  bool  $isFilter
+     * @return bool
+     */
+    function has_hooks(?string $name = null, bool $isFilter = true): bool
+    {
+        if (!$name || empty($name)) {
+            return false;
+        }
+        if ($isFilter) {
+            $listeners = Filter::getListeners();
+        } else {
+            $listeners = Action::getListeners();
+        }
+
+        return count(Arr::get($listeners, $name, [])) > 0;
+    }
+}
