@@ -12,14 +12,14 @@ class JsonData implements \ArrayAccess
     {
         return new self(json_decode(json_encode($this->__data ?? []), true), $this->__parent);
     }
-    public function getJsonFromFile($path_file)
+    public static function getJsonFromFile($path_file)
     {
         return json_decode(file_get_contents($path_file), true);;
     }
     public function loadJsonFromFile($path_file)
     {
         if (file_exists($path_file))
-            $this->__data = $this->getJsonFromFile($path_file);
+            $this->__data = self::getJsonFromFile($path_file);
         else   $this->__data = [];
     }
     public function __construct($data = null, $parent = null)
@@ -47,7 +47,7 @@ class JsonData implements \ArrayAccess
             return $this->__parent->{'get' . Str::studly($key) . 'Data'}($this);
         if (method_exists($this, 'get' . Str::studly($key) . 'Data'))
             return $this->{'get' . Str::studly($key) . 'Data'}();
-        return  $this->__data[$key];
+        return  isset($this->__data[$key]) ? $this->__data[$key] : null;
     }
 
     /**
