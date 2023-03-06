@@ -1,7 +1,7 @@
 {
   "name": "oengine/laravel-package",
   "license": "MIT",
-  "description": "",
+  "description": "support package base, merge plugin, hook filter action",
   "authors": [
     {
       "name": "Nguyen Van Hau",
@@ -10,13 +10,20 @@
       "homepage": "https://github.com/devhau"
     }
   ],
-  "require": {},
+  "require": {
+    "php": ">=7.4.0",
+    "composer-plugin-api": "^1.1||^2.0"
+  },
   "require-dev": {},
   "extra": {
     "laravel": {
       "providers": [],
       "aliases": {}
-    }
+    },
+    "branch-alias": {
+      "dev-master": "2.x-dev"
+    },
+    "class": "OEngine\\LaravelPackage\\Plugin\\MergePlugin"
   },
   "autoload": {
     "files": [
