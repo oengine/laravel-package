@@ -8,6 +8,10 @@ class JsonData implements \ArrayAccess
 {
     protected $__parent;
     private $__data;
+    public static function Create(): self
+    {
+        return new self();
+    }
     public function CloneData()
     {
         return new self(json_decode(json_encode($this->__data ?? []), true), $this->__parent);
